@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ITwebexperts_Ordereditor>
+            <version>0.0.1</version>
+        </ITwebexperts_Ordereditor>
+    </modules>
+    <global>
+
+        <models>
+            <ordereditor>
+                <class>ITwebexperts_Ordereditor_Model</class>
+                <resourceModel>ordereditor_mysql4</resourceModel>
+            </ordereditor>
+            <ordereditor_resource>
+                <class>ITwebexperts_Ordereditor_Model_Resource</class>
+            </ordereditor_resource>
+            <ordereditor_mysql4>
+                <class>ITwebexperts_Ordereditor_Model_Mysql4</class>
+                <entities>
+
+                </entities>
+            </ordereditor_mysql4>
+        </models>
+        <blocks>
+            <ordereditor>
+                <class>ITwebexperts_Ordereditor_Block</class>
+            </ordereditor>
+
+        </blocks>
+        <helpers>
+            <ordereditor>
+                <class>ITwebexperts_Ordereditor_Helper</class>
+            </ordereditor>
+        </helpers>
+        <resources>
+            <ordereditor_setup>
+                <setup>
+                    <module>ITwebexperts_Ordereditor</module>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                </setup>
+            </ordereditor_setup>
+        </resources>
+        <events>
+
+        </events>
+
+
+    </global>
+    <!--<crontab>
+        <jobs>
+            <check_invoices>
+                <schedule><cron_expr>0 6 * * *</cron_expr></schedule>
+                <run><model>ordereditor/observer::checkInvoices</model></run>
+            </check_invoices>
+        </jobs>
+    </crontab>-->
+    <frontend>
+        <routers>
+            <ordereditor_front>
+                <args>
+                    <modules>
+                        <itwebexperts_ordereditor before="ITwebexperts_Payperrentals">ITwebexperts_Ordereditor</itwebexperts_ordereditor>
+                    </modules>
+                </args>
+            </ordereditor_front>
+        </routers>
+        <layout>
+            <updates>
+                <itwebexperts_ordereditor>
+                    <file>ordereditor.xml</file>
+                </itwebexperts_ordereditor>
+            </updates>
+        </layout>
+    </frontend>
+    <adminhtml>
+        <layout>
+            <updates>
+                <itwebexperts_ordereditor>
+                    <file>ordereditor.xml</file>
+                </itwebexperts_ordereditor>
+            </updates>
+        </layout>
+        <events>
+
+
+        </events>
+    </adminhtml>
+    <admin>
+        <routers>
+            <ordereditor>
+                <args>
+                    <modules>
+                        <itwebexperts_ordereditor before="ITwebexperts_Payperrentals">ITwebexperts_Ordereditor</itwebexperts_ordereditor>
+                    </modules>
+                </args>
+            </ordereditor>
+        </routers>
+    </admin>
+</config>

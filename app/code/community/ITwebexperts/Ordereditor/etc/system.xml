@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <sales_igniter_tab translate="label">
+            <label><![CDATA[<div style="position: absolute;"><img id="si_block" src="" alt="" border="0" /></div>&nbsp;<script>
+            var n = SKIN_URL.indexOf("adminhtml");
+            $('si_block').src = SKIN_URL.substring(0, n) + "adminhtml/default/default/images/sales_igniter/si_system_logo.png";
+            </script>]]></label>
+            <sort_order>280</sort_order>
+        </sales_igniter_tab>
+    </tabs>
+    <sections>
+        <ordereditor translate="label" module="ordereditor">
+            <label><![CDATA[Rentals]]></label>
+            <tab>sales_igniter_tab</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>100</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <appearance_period translate="label">
+                    <label><![CDATA[Min/Max Rental Period]]></label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <min_period_number translate="label tooltip">
+                            <label><![CDATA[Minimum Period Number]]></label>
+                            <tooltip><![CDATA[Minimum rental period global setting. Like 2 Days means person can't rent less than 2 days. Only applies if product is set to use global setting]]></tooltip>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <can_be_empty>0</can_be_empty>
+                        </min_period_number>
+                    </fields>
+                </appearance_period>
+
+            </groups>
+        </ordereditor>
+    </sections>
+</config>
