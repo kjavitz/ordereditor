@@ -83,7 +83,15 @@
         </layout>
         <events>
 
-
+            <adminhtml_sales_order_creditmemo_register_before>
+                <observers>
+                    <payperrentals_observer_oneq>
+                        <type>singleton</type>
+                        <class>orderedit/observer</class>
+                        <method>creditMemoBefore</method>
+                    </payperrentals_observer_oneq>
+                </observers>
+            </adminhtml_sales_order_creditmemo_register_before>
         </events>
     </adminhtml>
     <admin>

@@ -1,4 +1,13 @@
 <?xml version="1.0"?>
 <layout>
-
+    <adminhtml_sales_order_view>
+        <reference name="sales_order_tabs">
+            <action method="addTab"><name>order_historyppr</name><block>orderedit/adminhtml_sales_order_view_tab_infohistory</block></action>
+        </reference>
+        <reference name="order_info">
+            <action method="setTemplate">
+                <template>orderedit/sales/order/view/info_order.phtml</template>
+            </action>
+        </reference>
+    </adminhtml_sales_order_view>
 </layout>
