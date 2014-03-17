@@ -2,7 +2,7 @@
 <config>
     <modules>
         <ITwebexperts_Ordereditor>
-            <version>0.0.1</version>
+            <version>0.1.0</version>
         </ITwebexperts_Ordereditor>
     </modules>
     <global>
@@ -42,7 +42,15 @@
             </ordereditor_setup>
         </resources>
         <events>
-
+            <sales_order_save_before>
+                <observers>
+                    <payperrentals_observer_save_before2>
+                        <type>singleton</type>
+                        <class>ordereditor/observer</class>
+                        <method>saveOrderBefore</method>
+                    </payperrentals_observer_save_before2>
+                </observers>
+            </sales_order_save_before>
         </events>
 
 
@@ -87,7 +95,7 @@
                 <observers>
                     <payperrentals_observer_oneq>
                         <type>singleton</type>
-                        <class>orderedit/observer</class>
+                        <class>ordereditor/observer</class>
                         <method>creditMemoBefore</method>
                     </payperrentals_observer_oneq>
                 </observers>

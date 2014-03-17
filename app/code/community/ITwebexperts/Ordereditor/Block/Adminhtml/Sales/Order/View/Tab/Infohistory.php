@@ -1,6 +1,6 @@
 <?php
 
-class ITwebexperts_Payperrentals_Block_Adminhtml_Sales_Order_View_Tab_Infohistory
+class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View_Tab_Infohistory
     extends Mage_Adminhtml_Block_Widget_Grid
     implements Mage_Adminhtml_Block_Widget_Tab_Interface
 {
