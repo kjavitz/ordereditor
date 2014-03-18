@@ -226,7 +226,7 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View_Tab_Infohistory
 
         $this->getMassactionBlock()->addItem('delete_order_completely', array(
             'label'=> Mage::helper('sales')->__('Delete Order Completely'),
-            'url'  => $this->getUrl('payperrentals/adminhtml_sales_order_create/massDelete'),//
+            'url'  => $this->getUrl('payperrentals/adminhtml_salesgrid/massDelete'),//
         ));
 //
         return $this;

@@ -1,5 +1,5 @@
 <?php
-class ITwebexperts_Payperrentals_Adminhtml_DifferenceController extends Mage_Adminhtml_Controller_Action
+class ITwebexperts_Ordereditor_Adminhtml_DifferenceController extends Mage_Adminhtml_Controller_Action
 {
 
     private $_storeId = '1';

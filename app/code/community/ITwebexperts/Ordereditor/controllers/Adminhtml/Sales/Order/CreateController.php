@@ -31,26 +31,16 @@
  * @package    Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-if(Mage::helper('itwebcommon')->hasPayperrentals()){
-    require_once 'ITwebexperts/Payperrentals/controllers/Adminhtml/Sales/Order/CreateController.php';
 
-    class ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController_Component extends ITwebexperts_Payperrentals_Adminhtml_Sales_Order_CreateController{
+require_once 'Mage/Adminhtml/controllers/Sales/Order/CreateController.php';
 
-    }
-
-}else{
-    require_once 'Mage/Adminhtml/controllers/Sales/Order/CreateController.php';
-    class ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController_Component extends Mage_Adminhtml_Sales_Order_CreateController
-    {
-
-    }
-}
 
 /**
- * Class ITwebexperts_Payperrentals_Adminhtml_Sales_Order_CreateController
+ * Class ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController
  */
-class ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController extends ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController_Component
+class ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController extends Mage_Adminhtml_Sales_Order_CreateController
 {
+
     /**
      * Saving quote and create order
      */
@@ -77,13 +67,14 @@ class ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController extends IT
             $this->_getSession()->clear();
 
             $orderPrev = Mage::getModel('sales/order')->load($order->getRelationParentId());
-            if(!is_object($orderPrev)){
+            if(!is_object($orderPrev) || is_null($order->getRelationParentId())){
                 Mage::getSingleton('adminhtml/session')->addSuccess($this->__('The order has been created.'));
                 if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/view')) {
                     $this->_redirect('*/sales_order/view', array('order_id' => $order->getId()));
                 } else {
                     $this->_redirect('*/sales_order/index');
                 }
+                return ;
             }
             $hasInvoices = $orderPrev->hasInvoices();
 
@@ -109,6 +100,7 @@ class ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController extends IT
             $orderPrev = Mage::getModel('sales/order')->load($order->getRelationParentId());
             $orderPrev->setIsHidden(1);
             $orderPrev->save();
+
             $order->setRealIncrement($orderPrev->getRealIncrement());
             if($orderPrev->getIsInvoice() == '1'){
                 $order->setIsInvoice(1);

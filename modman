@@ -5,4 +5,3 @@ app/design/frontend/base/default/layout/ordereditor.xml app/design/frontend/base
 app/design/frontend/base/default/template/ordereditor app/design/frontend/base/default/template/ordereditor
 app/etc/modules/ITwebexperts_Ordereditor.xml app/etc/modules/ITwebexperts_Ordereditor.xml
 skin/adminhtml/default/default/images/sales_igniter skin/adminhtml/default/default/images/sales_igniter
-app/code/local/Mage/Adminhtml app/code/local/Mage/Adminhtml

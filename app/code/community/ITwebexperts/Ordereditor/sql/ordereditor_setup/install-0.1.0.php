@@ -17,7 +17,7 @@ $installer2->addAttribute('order', 'is_hidden', array(
 
 $installer2->addAttribute('order', 'real_increment', array(
         'type' => 'varchar',
-        'grid' => false,
+        'grid' => true,
         'unsigned'  => true
     ));
 

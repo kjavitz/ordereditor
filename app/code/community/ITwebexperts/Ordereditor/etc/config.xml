@@ -21,12 +21,21 @@
 
                 </entities>
             </ordereditor_mysql4>
+            <adminhtml>
+                <rewrite>
+                    <sales_order_create>ITwebexperts_Ordereditor_Model_Adminhtml_Sales_Order_Create</sales_order_create>
+                </rewrite>
+            </adminhtml>
         </models>
         <blocks>
             <ordereditor>
                 <class>ITwebexperts_Ordereditor_Block</class>
             </ordereditor>
-
+            <adminhtml>
+                <rewrite>
+                    <sales_order_view>ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View</sales_order_view>
+                </rewrite>
+            </adminhtml>
         </blocks>
         <helpers>
             <ordereditor>
@@ -44,11 +53,11 @@
         <events>
             <sales_order_save_before>
                 <observers>
-                    <payperrentals_observer_save_before2>
+                    <ordereditor_observer_save_before2>
                         <type>singleton</type>
                         <class>ordereditor/observer</class>
                         <method>saveOrderBefore</method>
-                    </payperrentals_observer_save_before2>
+                    </ordereditor_observer_save_before2>
                 </observers>
             </sales_order_save_before>
         </events>
@@ -90,27 +99,51 @@
             </updates>
         </layout>
         <events>
-
+            <sales_order_grid_collection_load_before>
+                <observers>
+                    <ordereditor_custgrid>
+                        <type>disabled</type>
+                        <class>ordereditor/observer</class>
+                        <method>salesOrderGridCollectionLoadBefore</method>
+                    </ordereditor_custgrid>
+                </observers>
+            </sales_order_grid_collection_load_before>
             <adminhtml_sales_order_creditmemo_register_before>
                 <observers>
-                    <payperrentals_observer_oneq>
+                    <ordereditor_observer_oneq>
                         <type>singleton</type>
                         <class>ordereditor/observer</class>
                         <method>creditMemoBefore</method>
-                    </payperrentals_observer_oneq>
+                    </ordereditor_observer_oneq>
                 </observers>
             </adminhtml_sales_order_creditmemo_register_before>
+            <adminhtml_block_html_before>
+                <observers>
+                    <ordereditor_append_custom_product_columns>
+                        <type>singleton</type>
+                        <class>ordereditor/observer</class>
+                        <method>beforeBlockToHtml</method>
+                    </ordereditor_append_custom_product_columns>
+                </observers>
+            </adminhtml_block_html_before>
         </events>
     </adminhtml>
     <admin>
         <routers>
-            <ordereditor>
+            <!--<payperrentals>
                 <args>
                     <modules>
                         <itwebexperts_ordereditor before="ITwebexperts_Payperrentals">ITwebexperts_Ordereditor</itwebexperts_ordereditor>
                     </modules>
                 </args>
-            </ordereditor>
+            </payperrentals>-->
+            <adminhtml>
+                <args>
+                    <modules>
+                        <itwebexperts_ordereditor before="Mage_Adminhtml">ITwebexperts_Ordereditor_Adminhtml</itwebexperts_ordereditor>
+                    </modules>
+                </args>
+            </adminhtml>
         </routers>
     </admin>
 </config>
