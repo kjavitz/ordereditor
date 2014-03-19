@@ -77,7 +77,7 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View extends Mage_Adm
             $this->removeButton('order_unhold');
             $this->removeButton('accept_payment');
             $this->removeButton('deny_payment');
-            $this->removeButton('order_invoice');
+
             $this->removeButton('order_ship');
             $this->removeButton('order_reorder');
 
@@ -88,6 +88,10 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View extends Mage_Adm
             $this->_updateButton('order_edit', 'onclick',
                 $onclickJs
             );
+        }
+
+        if(!($sum  == 0 || ($order->getIsInvoice() && $order->getIsInvoice() == 1))){
+            $this->removeButton('order_invoice');
         }
 
 

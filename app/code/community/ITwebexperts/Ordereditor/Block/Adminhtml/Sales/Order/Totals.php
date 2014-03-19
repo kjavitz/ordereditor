@@ -31,7 +31,7 @@
  * @package     Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Mage_Adminhtml_Block_Sales_Order_Totals extends Mage_Adminhtml_Block_Sales_Totals//Mage_Adminhtml_Block_Sales_Order_Abstract
+class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_Totals extends Mage_Adminhtml_Block_Sales_Order_Totals//Mage_Adminhtml_Block_Sales_Order_Abstract
 {
     /**
      * Initialize order totals array
@@ -45,7 +45,7 @@ class Mage_Adminhtml_Block_Sales_Order_Totals extends Mage_Adminhtml_Block_Sales
         $collection = Mage::getResourceModel('sales/order_invoice_collection');
 
         $collection->getSelect()->joinLeft(array('sfo'=> $coreResource->getTableName('sales_flat_order')),
-            'sfo.entity_id=main_table.order_id',array('sfo.base_grand_total as gd'));
+            'sfo.entity_id=main_table.order_id', array('sfo.base_grand_total as gd'));
 
         $collection->getSelect()->where('sfo.real_increment = ?', $this->getOrder()->getRealIncrement());
 

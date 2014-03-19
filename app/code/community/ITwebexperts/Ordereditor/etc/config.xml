@@ -34,6 +34,8 @@
             <adminhtml>
                 <rewrite>
                     <sales_order_view>ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View</sales_order_view>
+                    <sales_order_totals>ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_Totals</sales_order_totals>
+                    <sales_order_create_header>ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_Create_Header</sales_order_create_header>
                 </rewrite>
             </adminhtml>
         </blocks>
@@ -101,13 +103,37 @@
         <events>
             <sales_order_grid_collection_load_before>
                 <observers>
-                    <ordereditor_custgrid>
-                        <type>disabled</type>
+                    <ordereditor_custgrid5>
                         <class>ordereditor/observer</class>
                         <method>salesOrderGridCollectionLoadBefore</method>
-                    </ordereditor_custgrid>
+                    </ordereditor_custgrid5>
                 </observers>
             </sales_order_grid_collection_load_before>
+            <sales_order_invoice_grid_collection_load_before>
+                <observers>
+                    <ordereditor_custgrid1>
+                        <class>ordereditor/observer</class>
+                        <method>salesInvoiceGridCollectionLoadBefore</method>
+                    </ordereditor_custgrid1>
+                </observers>
+            </sales_order_invoice_grid_collection_load_before>
+            <sales_order_creditmemo_grid_collection_load_before>
+                <observers>
+                    <ordereditor_custgrid2>
+                        <class>ordereditor/observer</class>
+                        <method>salesCreditmemoGridCollectionLoadBefore</method>
+                    </ordereditor_custgrid2>
+                </observers>
+            </sales_order_creditmemo_grid_collection_load_before>
+            <sales_order_shipment_grid_collection_load_before>
+                <observers>
+                    <ordereditor_custgrid3>
+                        <class>ordereditor/observer</class>
+                        <method>salesShipmentGridCollectionLoadBefore</method>
+                    </ordereditor_custgrid3>
+                </observers>
+            </sales_order_shipment_grid_collection_load_before>
+
             <adminhtml_sales_order_creditmemo_register_before>
                 <observers>
                     <ordereditor_observer_oneq>

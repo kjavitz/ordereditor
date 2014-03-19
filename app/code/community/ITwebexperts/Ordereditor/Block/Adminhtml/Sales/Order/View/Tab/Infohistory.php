@@ -167,10 +167,10 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View_Tab_Infohistory
             'url'  => $this->getUrl('*/sales_order_shipment/massPrintShippingLabel'),
         ));
 
-        /*$this->getMassactionBlock()->addItem('delete_order_completely', array(
+        $this->getMassactionBlock()->addItem('delete_order_completely', array(
             'label'=> Mage::helper('sales')->__('Delete Order Completely'),
             'url'  => $this->getUrl('payperrentals/adminhtml_salesgrid/massDelete'),//
-        ));*/
+        ));
 //
         return $this;
     }

@@ -21,12 +21,59 @@ class ITwebexperts_Ordereditor_Model_Observer {
     {
         $collection = $_observer->getEvent()->getOrderGridCollection();
         $collection = (!$collection) ? Mage::getResourceModel('sales/order_grid_collection') : $collection;
+        $coreResource = Mage::getSingleton('core/resource');
+        $collection->getSelect()->joinLeft(array('sfo'=> $coreResource->getTableName('sales_flat_order')),
+            'sfo.entity_id=main_table.entity_id', array('sfo.is_hidden', 'sfo.is_invoice'));
+        $collection->getSelect()->where('sfo.is_hidden = 0 OR sfo.is_hidden is null');
+        $collection->getSelect()->where('sfo.is_invoice = 0 OR sfo.is_invoice is null');
+    }
 
-        $collection->getSelect()->where('main_table.is_hidden = 0')
-            ->orWhere('main_table.is_hidden is null');
-        $collection->getSelect()->where('main_table.is_invoice = 0 OR main_table.is_invoice is null');
+    public function salesInvoiceGridCollectionLoadBefore(Varien_Event_Observer $_observer)
+    {
+        $collection = $_observer->getEvent()->getOrderInvoiceGridCollection();
+        $collection = (!$collection) ? Mage::getResourceModel('sales/order_invoice_grid_collection') : $collection;
+
+        $coreResource = Mage::getSingleton('core/resource');
+        $collection->getSelect()->joinInner(array('sfo'=> $coreResource->getTableName('sales_flat_order')),
+            'sfo.entity_id=main_table.order_id', array('sfo.real_increment'));
+        if(Mage::app()->getRequest()->getParam('order_id')){
+            $order = Mage::getModel('sales/order')->load(Mage::app()->getRequest()->getParam('order_id'));
+            $collection->getSelect()->where('sfo.real_increment = ?', $order->getRealIncrement());
+        }
 
     }
+
+
+    public function salesCreditmemoGridCollectionLoadBefore(Varien_Event_Observer $_observer)
+    {
+        $collection = $_observer->getEvent()->getOrderCreditmemoGridCollection();
+        $collection = (!$collection) ? Mage::getResourceModel('sales/order_creditmemo_grid_collection') : $collection;
+
+        $coreResource = Mage::getSingleton('core/resource');
+        $collection->getSelect()->joinLeft(array('sfo'=> $coreResource->getTableName('sales_flat_order')),
+            'sfo.entity_id=main_table.order_id', array('sfo.real_increment'));
+        if(Mage::app()->getRequest()->getParam('order_id')){
+            $order = Mage::getModel('sales/order')->load(Mage::app()->getRequest()->getParam('order_id'));
+            $collection->getSelect()->where('sfo.real_increment = ?', $order->getRealIncrement());
+        }
+    }
+
+
+    public function salesShipmentGridCollectionLoadBefore(Varien_Event_Observer $_observer)
+    {
+        $collection = $_observer->getEvent()->getOrderShipmentGridCollection();
+        $collection = (!$collection) ? Mage::getResourceModel('sales/order_shipment_grid_collection') : $collection;
+
+        $coreResource = Mage::getSingleton('core/resource');
+        $collection->getSelect()->joinLeft(array('sfo'=> $coreResource->getTableName('sales_flat_order')),
+            'sfo.entity_id=main_table.order_id', array('sfo.real_increment'));
+        if(Mage::app()->getRequest()->getParam('order_id')){
+            $order = Mage::getModel('sales/order')->load(Mage::app()->getRequest()->getParam('order_id'));
+            $collection->getSelect()->where('sfo.real_increment = ?', $order->getRealIncrement());
+        }
+
+    }
+
 
     /**
      * Apply some needed changes to grid blocks before their HTML output
