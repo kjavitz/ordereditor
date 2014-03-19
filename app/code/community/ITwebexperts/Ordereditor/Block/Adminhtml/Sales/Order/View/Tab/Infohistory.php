@@ -18,39 +18,12 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View_Tab_Infohistory
 
     protected function _prepareCollection()
     {
-        /* $collection = Mage::getResourceModel($this->_getCollectionClass());
-         $this->setCollection($collection);
-         return parent::_prepareCollection();*/
-        $coreResource = Mage::getSingleton('core/resource');
+
         $collection = Mage::getResourceModel($this->_getCollectionClass());
-        /*$collection = Mage::getResourceModel($this->_getCollectionClass())
-                ->join(
-                    'sales/order_item',
-                    '`sales/order_item`.order_id=`main_table`.entity_id',
-                    array(
-                        'skus' => new Zend_Db_Expr('group_concat(`sales/order_item`.sku SEPARATOR ",")'),
-                    )
-                );
+        $collection->getSelect()->where('main_table.is_hidden = ?','1')
+                ->where('main_table.real_increment = ?', $this->getOrder()->getRealIncrement());
+        $collection->getSelect()->where('main_table.is_invoice = 0 OR main_table.is_invoice is null');
 
-        $collection->getSelect()->group('main_table.entity_id');*/
-        //if($this->getOrder()->getIsHidden() == '0'){
-            $collection->getSelect()->joinLeft(array('sfog' => $coreResource->getTableName('sales_flat_order_grid')),
-                'main_table.entity_id = sfog.entity_id',array('sfog.shipping_name','sfog.billing_name'));
-
-            $collection->getSelect()->joinLeft(array('sfo'=> $coreResource->getTableName('sales_flat_order')),
-                'sfo.entity_id=main_table.entity_id',array('sfo.customer_email','sfo.weight',
-                    'sfo.discount_description','sfo.increment_id','sfo.store_id','sfo.created_at','sfo.status',
-                    'sfo.base_grand_total','sfo.grand_total','sfo.start_datetime','sfo.end_datetime'));
-
-            $collection->getSelect()->joinLeft(array('sfoa'=>$coreResource->getTableName('sales_flat_order_address')),
-                'main_table.entity_id = sfoa.parent_id AND sfoa.address_type="shipping"',array('sfoa.street',
-                    'sfoa.city','sfoa.region','sfoa.postcode','sfoa.telephone'));
-
-            $collection->getSelect()->where('sfo.is_hidden = ?','1')
-                ->where('sfo.real_increment = ?', $this->getOrder()->getRealIncrement());
-
-            $collection->getSelect()->where('sfo.is_invoice = 0 OR sfo.is_invoice is null');
-        //}
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -113,35 +86,6 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View_Tab_Infohistory
             'width' => '70px',
             'options' => Mage::getSingleton('sales/order_config')->getStatuses(),
         ));
-        $this->addColumnAfter('start_datetime', array(
-            'header' => Mage::helper('payperrentals')->__('Start Date'),
-            'index' => 'start_datetime',
-            'filter_index' => 'sfo.start_datetime',
-            'renderer'  => new ITwebexperts_Payperrentals_Block_Adminhtml_Html_Renderer_Datetime(),
-            'type'  => 'datetime'
-        ),'created_at');
-        $this->addColumnAfter('end_datetime', array(
-            'header' => Mage::helper('payperrentals')->__('End Date'),
-            'index' => 'end_datetime',
-            'filter_index' => 'sfo.end_datetime',
-            'renderer'  => new ITwebexperts_Payperrentals_Block_Adminhtml_Html_Renderer_Datetime(),
-            'type'  => 'datetime'
-        ),'start_datetime');
-
-        $this->addColumnAfter('send_datetime', array(
-            'header' => Mage::helper('payperrentals')->__('Dropoff Date'),
-            'index' => 'send_datetime',
-            'filter_index' => 'sfo.send_datetime',
-            'renderer'  => new ITwebexperts_Payperrentals_Block_Adminhtml_Html_Renderer_Datetime(),
-            'type'  => 'datetime'
-        ),'end_datetime');
-        $this->addColumnAfter('return_datetime', array(
-            'header' => Mage::helper('payperrentals')->__('Pickup Date'),
-            'index' => 'return_datetime',
-            'filter_index' => 'sfo.return_datetime',
-            'renderer'  => new ITwebexperts_Payperrentals_Block_Adminhtml_Html_Renderer_Datetime(),
-            'type'  => 'datetime'
-        ),'send_datetime');
 
         if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/view')) {
             $this->addColumn('action',
@@ -167,7 +111,6 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View_Tab_Infohistory
 
         $this->addExportType('*/*/exportCsv', Mage::helper('sales')->__('CSV'));
         $this->addExportType('*/*/exportExcel', Mage::helper('sales')->__('Excel XML'));
-        $this->addExportType('payperrentals_admin/adminhtml_salesgrid/exportIcal', Mage::helper('payperrentals')->__('iCal'));
 
         return parent::_prepareColumns();
     }
@@ -224,10 +167,10 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View_Tab_Infohistory
             'url'  => $this->getUrl('*/sales_order_shipment/massPrintShippingLabel'),
         ));
 
-        $this->getMassactionBlock()->addItem('delete_order_completely', array(
+        /*$this->getMassactionBlock()->addItem('delete_order_completely', array(
             'label'=> Mage::helper('sales')->__('Delete Order Completely'),
             'url'  => $this->getUrl('payperrentals/adminhtml_salesgrid/massDelete'),//
-        ));
+        ));*/
 //
         return $this;
     }
