@@ -142,6 +142,7 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View extends Mage_Adm
             //Mage::helper('adminhtml')->getUrl('adminhtml/sales_order/view', array('order_id' => $id)
             return Mage::helper('sales')->__('Adjustment For Order # %s %s | %s.You can only Invoice', $this->getOrder()->getRealIncrement(), $_extOrderId, $this->formatDate($this->getOrder()->getCreatedAtDate(), 'medium', true));
         }
+
     }
 
 
@@ -176,9 +177,9 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View extends Mage_Adm
 
         if($sum > 0){
             if($sum - $this->getOrder()->getBaseGrandTotal() < 0){
-                return $this->getUrl('payperrentals_admin/adminhtml_difference/getorder/difference/'.(abs($sum - $this->getOrder()->getBaseGrandTotal())));
+                return $this->getUrl('ordereditor_admin/adminhtml_difference/getorder/difference/'.(abs($sum - $this->getOrder()->getBaseGrandTotal())));
             }else{
-                return $this->getUrl('payperrentals_admin/adminhtml_difference/getcreditmemo/difference/'.(abs($sum - $this->getOrder()->getBaseGrandTotal())));
+                return $this->getUrl('ordereditor_admin/adminhtml_difference/getcreditmemo/difference/'.(abs($sum - $this->getOrder()->getBaseGrandTotal())));
             }
         }else{
             return $this->getInvoiceUrl();

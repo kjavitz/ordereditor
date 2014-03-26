@@ -39,8 +39,11 @@ class ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController extends Ma
                 }
                 return ;
             }
-            $hasInvoices = $orderPrev->hasInvoices();
 
+            /*
+             * This part can have some kind of checkbox. Not sure
+
+            $hasInvoices = $orderPrev->hasInvoices();
             if ($order->canInvoice() && $hasInvoices) {
                 try {
                     $invoiceId = Mage::getModel('sales/order_invoice_api')
@@ -58,7 +61,7 @@ class ITwebexperts_Ordereditor_Adminhtml_Sales_Order_CreateController extends Ma
                 }
                 catch (Mage_Core_Exception $e) {
                 }
-            }
+            }*/
 
             $orderPrev = Mage::getModel('sales/order')->load($order->getRelationParentId());
             $orderPrev->setIsHidden(1);

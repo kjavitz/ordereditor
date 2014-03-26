@@ -2,7 +2,7 @@
 <config>
     <modules>
         <ITwebexperts_Ordereditor>
-            <version>0.1.0</version>
+            <version>0.2.0</version>
         </ITwebexperts_Ordereditor>
     </modules>
     <global>
@@ -62,6 +62,42 @@
                     </ordereditor_observer_save_before2>
                 </observers>
             </sales_order_save_before>
+            <sales_order_invoice_save_before>
+                <observers>
+                    <ordereditor_observer_save_before3>
+                        <type>singleton</type>
+                        <class>ordereditor/observer</class>
+                        <method>saveOrderInvoiceBefore</method>
+                    </ordereditor_observer_save_before3>
+                </observers>
+            </sales_order_invoice_save_before>
+            <sales_order_invoice_save_after>
+                <observers>
+                    <ordereditor_observer_save_after3>
+                        <type>singleton</type>
+                        <class>ordereditor/observer</class>
+                        <method>saveOrderInvoiceAfter</method>
+                    </ordereditor_observer_save_after3>
+                </observers>
+            </sales_order_invoice_save_after>
+            <sales_order_creditmemo_save_before>
+                <observers>
+                    <ordereditor_observer_save_before4>
+                        <type>singleton</type>
+                        <class>ordereditor/observer</class>
+                        <method>saveOrderCreditMemoBefore</method>
+                    </ordereditor_observer_save_before4>
+                </observers>
+            </sales_order_creditmemo_save_before>
+            <sales_order_shipment_save_before>
+                <observers>
+                    <ordereditor_observer_save_before5>
+                        <type>singleton</type>
+                        <class>ordereditor/observer</class>
+                        <method>saveOrderShipmentBefore</method>
+                    </ordereditor_observer_save_before5>
+                </observers>
+            </sales_order_shipment_save_before>
         </events>
 
 
@@ -133,7 +169,6 @@
                     </ordereditor_custgrid3>
                 </observers>
             </sales_order_shipment_grid_collection_load_before>
-
             <adminhtml_sales_order_creditmemo_register_before>
                 <observers>
                     <ordereditor_observer_oneq>
@@ -152,6 +187,25 @@
                     </ordereditor_append_custom_product_columns>
                 </observers>
             </adminhtml_block_html_before>
+            <sales_convert_order_item_to_quote_item>
+                <observers>
+                    <ordereditor_observer_oner>
+                        <type>singleton</type>
+                        <class>ordereditor/observer</class>
+                        <method>checkoutCartProductAddAfter</method>
+                    </ordereditor_observer_oner>
+                </observers>
+            </sales_convert_order_item_to_quote_item>
+
+            <!--  <catalog_product_get_final_price>
+                  <observers>
+                      <ordereditor_catalog_product_get_final_price>
+                          <type>singleton</type>
+                          <class>ordereditor/observer</class>
+                          <method>changePriceForDifference</method>
+                      </ordereditor_catalog_product_get_final_price>
+                  </observers>
+              </catalog_product_get_final_price>-->
         </events>
     </adminhtml>
     <admin>
@@ -163,6 +217,13 @@
                     </modules>
                 </args>
             </payperrentals>-->
+            <ordereditor>
+                <use>admin</use>
+                <args>
+                    <module>ITwebexperts_Ordereditor</module>
+                    <frontName>ordereditor_admin</frontName>
+                </args>
+            </ordereditor>
             <adminhtml>
                 <args>
                     <modules>
