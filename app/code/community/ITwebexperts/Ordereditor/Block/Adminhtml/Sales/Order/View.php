@@ -67,7 +67,7 @@ class ITwebexperts_Ordereditor_Block_Adminhtml_Sales_Order_View extends Mage_Adm
         }
         $sum = $sumInvoice - $sumCredit;
 
-        if(!(!$order->getIsInvoice() || $order->getIsInvoice() == 0)){
+        if($order->getIsInvoice() && $order->getIsInvoice() == 1 || $order->getIsHidden() && $order->getIsHidden() == 1){
             $this->removeButton('order_edit');
             $this->removeButton('order_cancel');
             $this->removeButton('send_notification');

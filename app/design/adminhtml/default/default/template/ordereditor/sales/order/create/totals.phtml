@@ -1,0 +1,104 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+//in an order normally no other element beside shipping method should change.
+//On edit the rest of elements will remain the same so no need to change them.
+//so I'll add a way so that it gets the default selected shipping method and if not changed manually it will always select it
+//if changed again it will select it always if exists in the list.
+
+//not sure what should happen when changing an address(lets leave the default behaviour for now)
+
+//so the quote differences must be done either in totals.phtml either in shipping_method chooser.phtml
+//it will compare the old quote with new quote and check from quoteitem differences in options, price, quantity,
+//also totals, shipping method, billing method and addresses
+
+//for the edited orders and isinvoice ones hide all the buttons and tabs
+
+// in order history when clicking an order it will show acomparison side by side. This can be done by using
+// a jquery comparison by filter :input. this could be done also on comparison... have a quote item comparison and a field comparison by jquery
+
+//make priorities first 1. Shipping keep field 1.1 order_edited column 2. notes field 2.1 what happends with payment methods for invoices? should be kept probably 3. quote items comparison
+
+?>
+<table cellspacing="0" cellpadding="8" width="100%">
+    <tbody>
+        <?php echo $this->renderTotals(); ?>
+        <?php echo $this->renderTotals('footer'); ?>
+    </tbody>
+</table>
+<div class="divider"></div>
+<div class="order-totals-bottom">
+    <p>
+        <label for="notify_customer" class="normal"><?php echo Mage::helper('sales')->__('Append Comments') ?></label>
+        <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]" value="1" <?php if($this->getNoteNotify()): ?>checked="true"<?php endif; ?>/>
+    </p>
+    <?php if ($this->canSendNewOrderConfirmationEmail()): ?>
+    <p>
+        <label for="send_confirmation" class="normal"><?php echo Mage::helper('sales')->__('Email Order Confirmation') ?></label>
+        <input type="checkbox" id="send_confirmation" name="order[send_confirmation]" value="1" checked="checked"/>
+    </p>
+    <?php endif; ?>
+    <p><?php echo $this->getButtonHtml(Mage::helper('sales')->__('Submit Order'),'order.submit()','save'); ?></p>
+</div>
+
+<script type="text/javascript" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS) . 'itwebexperts_ordereditor/jqueryui/jquery.cookie.js'; ?>"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+//var $jpprCookie = jQuery.noConflict();
+var sendEmailCheckbox = $('send_confirmation');
+if (sendEmailCheckbox) {
+    Event.observe(sendEmailCheckbox, 'change', notifyCustomerUpdate);
+    notifyCustomerUpdate();
+}
+
+function notifyCustomerUpdate() {
+    var sendEmailCheckbox = $('send_confirmation');
+    var notifyCustomerCheckbox = $('notify_customer');
+    if (!sendEmailCheckbox || !notifyCustomerCheckbox)
+        return;
+    notifyCustomerCheckbox.disabled = !sendEmailCheckbox.checked;
+}
+
+
+if(typeof $jppr.cookie('shipping_method') == "undefined"){
+
+    $jppr.cookie('shipping_method', '1');
+
+    $jppr("#order-shipping-method-choose").find('input,textarea,select').each(function(){
+        console.log($jppr(this).attr('name')+'  '+$jppr(this).val());
+        $jppr.cookie($jppr(this).attr('name'),$jppr(this).val());
+    });
+
+}else{
+
+    $jppr("#order-shipping-method-choose").find('input,textarea,select').each(function(){
+        console.log('b:'+$jppr(this).attr('name')+'  '+$jppr.cookie($jppr(this).attr('name')));
+        $jppr(this).val($jppr.cookie($jppr(this).attr('name')));
+    });
+}
+//]]>
+</script>

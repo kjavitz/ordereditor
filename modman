@@ -4,4 +4,5 @@ app/design/adminhtml/default/default/template/ordereditor app/design/adminhtml/d
 app/design/frontend/base/default/layout/ordereditor.xml app/design/frontend/base/default/layout/ordereditor.xml
 app/design/frontend/base/default/template/ordereditor app/design/frontend/base/default/template/ordereditor
 app/etc/modules/ITwebexperts_Ordereditor.xml app/etc/modules/ITwebexperts_Ordereditor.xml
+js/itwebexperts_ordereditor js/itwebexperts_ordereditor
 skin/adminhtml/default/default/images/sales_igniter skin/adminhtml/default/default/images/sales_igniter

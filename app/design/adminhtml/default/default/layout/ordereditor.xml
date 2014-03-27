@@ -10,4 +10,28 @@
             </action>
         </reference>
     </adminhtml_sales_order_view>
+
+    <adminhtml_sales_order_create_index>
+        <reference name="totals">
+            <action method="setTemplate">
+                <template>ordereditor/sales/order/create/totals.phtml</template>
+            </action>
+        </reference>
+    </adminhtml_sales_order_create_index>
+
+    <adminhtml_sales_order_create_load_block_data>
+        <reference name="totals">
+            <action method="setTemplate">
+                <template>ordereditor/sales/order/create/totals.phtml</template>
+            </action>
+        </reference>
+    </adminhtml_sales_order_create_load_block_data>
+
+    <adminhtml_sales_order_create_load_block_totals>
+        <reference name="totals">
+            <action method="setTemplate">
+                <template>ordereditor/sales/order/create/totals.phtml</template>
+            </action>
+        </reference>
+    </adminhtml_sales_order_create_load_block_totals>
 </layout>

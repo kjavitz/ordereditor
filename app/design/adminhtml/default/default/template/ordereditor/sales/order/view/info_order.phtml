@@ -158,3 +158,17 @@ $orderStoreDate = $this->formatDate($_order->getCreatedAtStoreDate(), 'medium', 
 </div>
 <div class="clear"></div>
 <?php endif; ?>
+
+<?php $_hideTabs = false; ?>
+<?php if($this->getOrder()->getIsInvoice() && $this->getOrder()->getIsInvoice() == 1 || $this->getOrder()->getIsHidden() && $this->getOrder()->getIsHidden() == 1): ?>
+    <?php $_hideTabs = true; ?>
+<?php endif; ?>
+
+<?php if($_hideTabs): ?>
+<script type="text/javascript">
+    document.observe("dom:loaded", function() {
+        // initially hide all containers for tab content
+        $$('ul#sales_order_view_tabs.tabs').invoke('hide');
+    });
+</script>
+<?php endif; ?>
