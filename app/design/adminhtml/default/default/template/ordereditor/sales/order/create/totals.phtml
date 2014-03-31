@@ -40,7 +40,7 @@
 // in order history when clicking an order it will show acomparison side by side. This can be done by using
 // a jquery comparison by filter :input. this could be done also on comparison... have a quote item comparison and a field comparison by jquery
 
-//make priorities first 1. Shipping keep field 1.1 order_edited column 2. notes field 2.1 what happends with payment methods for invoices? should be kept probably 3. quote items comparison
+//make priorities first 1. Shipping keep field 1.1 order_edited column 2. notes field 2.1 what happens with payment methods for invoices? should be kept probably 3. quote items comparison
 
 ?>
 <table cellspacing="0" cellpadding="8" width="100%">
@@ -84,21 +84,174 @@ function notifyCustomerUpdate() {
 }
 
 
-if(typeof $jppr.cookie('shipping_method') == "undefined"){
+function restoreData(field, resque){
+    if(typeof resque === 'undefined'){
+        resque = false;
+    }
+    if ( field.attr( "name" ) === undefined ) {
+        return false;
+    }
+    var restored = false;
+    if ( field.is( ":checkbox" ) && resque !== "false" && field.attr( "name" ).indexOf( "[" ) === -1 ) {
+        field.attr( "checked", "checked" );
+        restored = true;
+    } else if( field.is( ":checkbox" ) && resque === "false" && field.attr( "name" ).indexOf( "[" ) === -1 ) {
+        field.removeAttr( "checked" );
+    } else if ( field.is( ":radio" ) ) {
+        if ( field.val() === resque ) {
+            field.attr( "checked", "checked" );
+            restored = true;
+        }
+    } else if ( field.attr( "name" ).indexOf( "[" ) === -1 ) {
+        field.val( resque );
+        restored = true;
+    } else {
+        resque = resque.split( "," );
+        field.val( resque );
+        restored = true;
+    }
+    if(restored){
+        var justRestored = $jppr.cookie('just_restored');
+        if(typeof justRestored !== 'undefined'){
+            justRestored = justRestored.split(';')
+        }
+        //if(typeof justRestored === 'undefined' || !$jppr.inArray(justRestored, field.attr( "name" ))) {
 
-    $jppr.cookie('shipping_method', '1');
+        field.trigger('click');
+        field.trigger('change');
+        if(typeof justRestored !== 'undefined') {
+            $jppr.cookie('just_restored', justRestored.join(';') + ';' + field.attr("name"));
+        }else{
+            $jppr.cookie('just_restored', field.attr("name"));
+        }
 
-    $jppr("#order-shipping-method-choose").find('input,textarea,select').each(function(){
-        console.log($jppr(this).attr('name')+'  '+$jppr(this).val());
-        $jppr.cookie($jppr(this).attr('name'),$jppr(this).val());
-    });
+        order.fromRestored = true;
+    }
 
-}else{
-
-    $jppr("#order-shipping-method-choose").find('input,textarea,select').each(function(){
-        console.log('b:'+$jppr(this).attr('name')+'  '+$jppr.cookie($jppr(this).attr('name')));
-        $jppr(this).val($jppr.cookie($jppr(this).attr('name')));
-    });
 }
+
+function saveData(field){
+    //var field = $jppr(this);
+    var multiCheckboxCache = {};
+
+    var value = field.val();
+
+    if ( field.is(":checkbox") ) {
+        if ( field.attr( "name" ).indexOf( "[" ) !== -1 ) {
+            if ( multiCheckboxCache[ field.attr( "name" ) ] === true ) {
+                return;
+            }
+            value = [];
+            $jppr( "[name='" + field.attr( "name" ) +"']:checked" ).each( function() {
+                value.push( $jppr( this ).val() );
+            } );
+            multiCheckboxCache[ field.attr( "name" ) ] = true;
+        } else {
+            value = field.is( ":checked" );
+        }
+        //self.saveToBrowserStorage( prefix, value, false );
+
+        $jppr.cookie(field.attr( "name" ), value);
+    } else if ( field.is( ":radio" ) ) {
+        if ( field.is( ":checked" ) ) {
+            value = field.val();
+            $jppr.cookie(field.attr( "name" ), value);
+        }
+    } else {
+        $jppr.cookie(field.attr( "name" ), value);
+    }
+}
+
+//$(order.getAreaId('totals')).callback = 'totalsAfter';
+//$(order.getAreaId('shipping_method')).callback = 'shippingMethodAfter';
+
+/*AdminOrder.prototype.loadShippingRates = AdminOrder.prototype.loadShippingRates.wrap(function(parentMethod, response){
+ this.isShippingMethodReseted = false;
+ this.loadArea(['shipping_method', 'totals'], true, {collect_shipping_rates: 1});
+ });*/
+
+/*AdminOrder.prototype.shippingMethodAfter = function(){
+ if( this.isFromRates) {
+ this.loadShippingRates();
+ }else {
+
+ }
+
+ };*/
+AdminOrder.prototype.loadAreaResponseHandler = AdminOrder.prototype.loadAreaResponseHandler.wrap(function(parentMethod, response){
+    if (response.error) {
+        alert(response.message);
+    }
+    if(response.ajaxExpired && response.ajaxRedirect) {
+        setLocation(response.ajaxRedirect);
+    }
+    if(!this.loadingAreas){
+        this.loadingAreas = [];
+    }
+    if(typeof this.loadingAreas == 'string'){
+        this.loadingAreas = [this.loadingAreas];
+    }
+    if(this.loadingAreas.indexOf('message') == -1) {
+        this.loadingAreas.push('message');
+    }
+    //var isFromRates = this.isFromRates;
+    var hasShipping = false;
+    for(var i=0; i<this.loadingAreas.length; i++){
+        var id = this.loadingAreas[i];
+        if($(this.getAreaId(id))){
+            if ('message' != id || response[id]) {
+                var wrapper = new Element('div');
+                wrapper.update(response[id] ? response[id] : '');
+                $(this.getAreaId(id)).update(Prototype.Browser.IE ? wrapper.outerHTML : wrapper);
+            }
+            if(id == 'shipping_method') {
+                hasShipping = true;
+            }
+            if ($(this.getAreaId(id)).callback) {
+                this[$(this.getAreaId(id)).callback]();
+            }
+        }
+    }
+    if(hasShipping && !this.isFromRates){
+        // this.isShippingMethodReseted = true;
+        this.isFromRates = true;
+        this.loadArea(['shipping_method', 'totals'], true, {collect_shipping_rates: 1});
+    }
+    else{
+        if(!this.fromRestored) {
+            if($jppr("#order-shipping-method-choose").length <= 0){
+                this.isFromRates = true;
+                this.loadArea(['shipping_method', 'totals'], true, {collect_shipping_rates: 1});
+            }else {
+                $jppr("#order-shipping-method-choose").find('input,textarea,select').each(function () {
+                    var field = $jppr(this);
+                    var resque = $jppr.cookie(field.attr("name"));
+
+                    if (typeof resque !== 'undefined') {
+                        restoreData(field, resque, true);
+                    }
+                });
+                this.isFromRates = false;
+
+            }
+
+        }else{
+            this.fromRestored = false;
+        }
+
+    }
+
+});
+
+$jppr(document).ready(function(){
+    $jppr("#order-shipping-method-choose").find('input,textarea,select').each(function(){
+        var field = $jppr(this);
+        saveData(field);
+        field.change(function(){
+            saveData(field);
+        });
+    });
+});
+
 //]]>
 </script>
